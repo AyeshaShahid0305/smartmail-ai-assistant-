@@ -184,6 +184,11 @@
       transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
     }
 
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(22, 33, 62, 0.34);
+    }
+
     textarea {
       min-height: 150px;
       resize: vertical;
@@ -218,6 +223,21 @@
       cursor: pointer;
       box-shadow: 0 12px 22px rgba(36, 87, 255, 0.18);
       transition: filter 180ms ease;
+    }
+
+    .btn.loading {
+      opacity: 0.85;
+      cursor: progress;
+    }
+
+    .btn-spinner {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
     }
 
     .btn.secondary {
@@ -263,6 +283,41 @@
       text-transform: uppercase;
     }
 
+    .output-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .copy-btn {
+      border: 1px solid rgba(36, 87, 255, 0.18);
+      background: linear-gradient(135deg, rgba(36, 87, 255, 0.10), rgba(123, 97, 255, 0.10));
+      color: #2446b9;
+      border-radius: 999px;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .copy-btn:hover {
+      background: linear-gradient(135deg, rgba(36, 87, 255, 0.16), rgba(123, 97, 255, 0.16));
+    }
+
+    .copy-btn svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      fill: currentColor;
+    }
+
     .output-card p, .output-card pre {
       margin: 0;
       white-space: pre-wrap;
@@ -295,6 +350,10 @@
         transition: none !important;
         scroll-behavior: auto !important;
       }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -343,22 +402,26 @@
         <div class="panel-body">
           <div class="field">
             <label for="purpose">Purpose of email</label>
-            <input id="purpose" type="text" value="Meeting reschedule" />
+            <input id="purpose" type="text" placeholder="Meeting reschedule" />
           </div>
           <div class="row">
             <div class="field">
               <label for="receiver">Receiver</label>
-              <input id="receiver" type="text" value="Manager" />
+              <input id="receiver" type="text" placeholder="Manager / HR / Team Lead" />
             </div>
             <div class="field">
-              <label for="tone">Tone</label>
-              <select id="tone">
-                <option>Formal</option>
-                <option>Friendly</option>
-                <option selected>Professional</option>
-                <option>Apologetic</option>
-              </select>
+              <label for="senderRole">Sender Role</label>
+              <input id="senderRole" type="text" placeholder="Student / Employee / Intern" />
             </div>
+          </div>
+          <div class="field">
+            <label for="tone">Tone</label>
+            <select id="tone">
+              <option>Formal</option>
+              <option>Friendly</option>
+              <option selected>Professional</option>
+              <option>Apologetic</option>
+            </select>
           </div>
           <div class="field">
             <label for="sender">Sender Name</label>
@@ -366,16 +429,14 @@
           </div>
           <div class="field">
             <label for="points">Key points</label>
-            <textarea id="points">- Need to move the meeting
+            <textarea id="points" placeholder="- Need to move the meeting
 - Available tomorrow afternoon
-- Please confirm a new time</textarea>
+- Please confirm a new time"></textarea>
           </div>
           <div class="button-row">
             <button class="btn" id="generateBtn" type="button">Generate Email</button>
             <button class="btn secondary" id="downloadBtn" type="button">Download Result</button>
           </div>
-          <div class="footer-note">This preview matches the app concept and layout you asked for.</div>
-          <div class="footer-note">It is only a quick idea mockup, not the final email.</div>
         </div>
       </div>
 
@@ -390,8 +451,13 @@
             <p class="subject" id="subjectOut">Meeting Reschedule</p>
           </div>
           <div class="output-card">
-            <h3>Professional Email</h3>
-            <p id="emailOut">Dear Manager,
+            <div class="output-head">
+              <h3>Professional Email</h3>
+              <button class="copy-btn" id="copyEmailBtn" type="button" aria-label="Copy professional email" title="Copy professional email">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+              </button>
+            </div>
+            <p id="emailOut">Dear Manager:
 
 I hope you are doing well. I am writing to request a meeting reschedule.
 
@@ -403,11 +469,21 @@ Best regards,
 Your Name</p>
           </div>
           <div class="output-card">
-            <h3>Short Version</h3>
+            <div class="output-head">
+              <h3>Short Version</h3>
+              <button class="copy-btn" id="copyShortBtn" type="button" aria-label="Copy short version" title="Copy short version">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+              </button>
+            </div>
             <p id="shortOut">Dear Manager, I would like to reschedule the meeting. I am available tomorrow afternoon. Thank you.</p>
           </div>
           <div class="output-card">
-            <h3>Improved Version</h3>
+            <div class="output-head">
+              <h3>Improved Version</h3>
+              <button class="copy-btn" id="copyImprovedBtn" type="button" aria-label="Copy improved version" title="Copy improved version">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+              </button>
+            </div>
             <p id="improvedOut">Dear Manager, I am writing to request a meeting reschedule. I am available tomorrow afternoon and would appreciate a new time.</p>
           </div>
         </div>
@@ -418,6 +494,7 @@ Your Name</p>
   <script>
     const purposeEl = document.getElementById('purpose');
     const receiverEl = document.getElementById('receiver');
+    const senderRoleEl = document.getElementById('senderRole');
     const toneEl = document.getElementById('tone');
     const senderEl = document.getElementById('sender');
     const pointsEl = document.getElementById('points');
@@ -427,6 +504,9 @@ Your Name</p>
     const improvedOut = document.getElementById('improvedOut');
     const generateBtn = document.getElementById('generateBtn');
     const downloadBtn = document.getElementById('downloadBtn');
+    const copyEmailBtn = document.getElementById('copyEmailBtn');
+    const copyShortBtn = document.getElementById('copyShortBtn');
+    const copyImprovedBtn = document.getElementById('copyImprovedBtn');
 
     function cleanupPoints(text) {
       return text
@@ -454,9 +534,89 @@ Your Name</p>
       return match[2] ? `${match[1]} days` : `${match[1]} day`;
     }
 
+    function applySpellingFix(text) {
+      const corrections = {
+        accomodate: 'accommodate',
+        adress: 'address',
+        definately: 'definitely',
+        enviroment: 'environment',
+        febuary: 'february',
+        goverment: 'government',
+        grammer: 'grammar',
+        hte: 'the',
+        interesed: 'interested',
+        occurence: 'occurrence',
+        recevied: 'received',
+        recieved: 'received',
+        rechedule: 'reschedule',
+        reshedule: 'reschedule',
+        seperately: 'separately',
+        thier: 'their',
+        tommorow: 'tomorrow',
+        tuesday: 'Tuesday',
+        wednesday: 'Wednesday',
+        thursday: 'Thursday',
+        friday: 'Friday',
+        saturday: 'Saturday',
+        sunday: 'Sunday',
+        mananger: 'manager',
+        empolyee: 'employee',
+        studentt: 'student',
+      };
+
+      return String(text || '')
+        .split(/(\b)/)
+        .map((part) => {
+          const lower = part.toLowerCase();
+          if (!corrections[lower]) return part;
+          const replacement = corrections[lower];
+          return part[0] === part[0]?.toUpperCase()
+            ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
+            : replacement;
+        })
+        .join('');
+    }
+
+    function applyGrammarFix(text) {
+      let fixed = String(text || '');
+      fixed = applySpellingFix(fixed);
+      fixed = fixed.replace(/\bi\b/g, 'I');
+      fixed = fixed.replace(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+day\b/gi, (match, value) => {
+        const lower = value.toLowerCase();
+        if (lower === '1' || lower === 'one') return `${value} day`;
+        return `${value} days`;
+      });
+      fixed = fixed.replace(/\s+,/g, ',');
+      fixed = fixed.replace(/\s+\./g, '.');
+      fixed = fixed.replace(/\s{2,}/g, ' ');
+      fixed = fixed.replace(/\n{3,}/g, '\n\n');
+      return fixed.trim();
+    }
+
+    function buildBodyText(purpose, points, leaveDuration) {
+      const purposeLower = purpose.toLowerCase();
+      const pointText = bulletsToParagraph(points);
+
+      if (purposeLower.includes('application') || purposeLower.includes('job') || purposeLower.includes('role')) {
+        return 'I am writing to express my interest in the role and have attached my CV for your review. I look forward to the opportunity to discuss my application further.';
+      }
+
+      if (purposeLower.includes('meeting') || purposeLower.includes('reschedule')) {
+        return 'I am writing to request a meeting reschedule. I am available tomorrow afternoon and would appreciate a new time.';
+      }
+
+      if (purposeLower.includes('leave')) {
+        const durationText = leaveDuration ? `for ${leaveDuration}` : 'for a short period';
+        return `I am writing to request leave ${durationText}. I will make sure my pending work is completed before my absence.`;
+      }
+
+      return `I am writing regarding ${purposeLower}. ${pointText}`;
+    }
+
     function buildEmail() {
       const purpose = purposeEl.value.trim() || 'Email request';
       const receiver = receiverEl.value.trim() || 'Recipient';
+      const senderRole = senderRoleEl.value.trim() || 'Student';
       const tone = toneEl.value.trim() || 'Professional';
       const sender = senderEl.value.trim() || 'Your Name';
       const points = cleanupPoints(pointsEl.value);
@@ -479,12 +639,13 @@ Your Name</p>
           ? 'I am sorry for any inconvenience, but I would like to request support with the following matter.'
           : 'I hope you are doing well.';
 
-      const detailSentence = bulletsToParagraph(points);
+      const bodyText = buildBodyText(purpose, points, leaveDuration);
 
-      const email = `${opening}\n\n${intro}\n\nI would like to share the following details: ${detailSentence}\n\nThank you for your time and consideration.\n\nBest regards,\n${sender}`;
+      const rawEmail = `${opening}\n\n${intro}\n\n${bodyText}\n\nPlease let me know if anything else is needed from my side.\n\nThank you for your time and consideration.\n\nBest regards,\n${sender}`;
+      const email = applyGrammarFix(rawEmail);
 
-      const shortVersion = `${opening} ${normalizedPurpose}. ${points[0] ? sentenceCase(points[0]).replace(/[.!?]$/, '') : 'Please consider the request'}.\nThank you.`;
-      const improvedVersion = `${opening} I am writing regarding ${normalizedPurpose.toLowerCase()}. ${detailSentence} Thank you for your consideration.`;
+      const shortVersion = applyGrammarFix(`${opening} ${normalizedPurpose}. ${points[0] ? sentenceCase(points[0]).replace(/[.!?]$/, '') : 'Please consider the request'}.\nThank you.`);
+      const improvedVersion = applyGrammarFix(`${opening} ${buildBodyText(purpose, points, leaveDuration)} Please let me know if anything else is needed from my side. Thank you for your consideration.`);
 
       subjectOut.textContent = subject;
       emailOut.textContent = email;
@@ -494,24 +655,192 @@ Your Name</p>
       return { subject, email, shortVersion, improvedVersion };
     }
 
-    generateBtn.addEventListener('click', buildEmail);
+    function setGenerateLoading(isLoading) {
+      if (isLoading) {
+        generateBtn.classList.add('loading');
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span><span>Generating...</span>';
+        return;
+      }
+
+      generateBtn.classList.remove('loading');
+      generateBtn.disabled = false;
+      generateBtn.textContent = 'Generate Email';
+    }
+
+    async function copyTextFromNode(sourceNode, buttonNode) {
+      const text = sourceNode.textContent || '';
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const temp = document.createElement('textarea');
+          temp.value = text;
+          temp.style.position = 'fixed';
+          temp.style.left = '-9999px';
+          document.body.appendChild(temp);
+          temp.focus();
+          temp.select();
+          document.execCommand('copy');
+          temp.remove();
+        }
+        buttonNode.title = 'Copied';
+        setTimeout(() => {
+          buttonNode.title = 'Copy';
+        }, 1200);
+      } catch (error) {
+        buttonNode.title = 'Copy failed';
+        setTimeout(() => {
+          buttonNode.title = 'Copy';
+        }, 1200);
+      }
+    }
+
+    function escapePdfText(text) {
+      return text
+        .replace(/\\/g, '\\\\')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)');
+    }
+
+    function wrapPdfLines(text, maxChars) {
+      const lines = [];
+      for (const rawLine of text.split('\n')) {
+        const words = rawLine.split(/\s+/).filter(Boolean);
+        if (!words.length) {
+          lines.push('');
+          continue;
+        }
+
+        let current = '';
+        for (const word of words) {
+          const next = current ? `${current} ${word}` : word;
+          if (next.length > maxChars) {
+            if (current) lines.push(current);
+            current = word;
+          } else {
+            current = next;
+          }
+        }
+        if (current) lines.push(current);
+      }
+      return lines;
+    }
+
+    function buildPdfBlob(title, sections) {
+      const pageWidth = 595;
+      const pageHeight = 842;
+      const leftMargin = 48;
+      const topMargin = 48;
+      const bottomMargin = 48;
+      const fontSize = 12;
+      const lineHeight = 16;
+      const maxChars = 78;
+      const linesPerPage = Math.floor((pageHeight - topMargin - bottomMargin) / lineHeight) - 2;
+
+      const allLines = [];
+      allLines.push(title);
+      allLines.push('');
+
+      for (const section of sections) {
+        allLines.push(section.heading);
+        allLines.push(...wrapPdfLines(section.body, maxChars));
+        allLines.push('');
+      }
+
+      const pages = [];
+      for (let i = 0; i < allLines.length; i += linesPerPage) {
+        pages.push(allLines.slice(i, i + linesPerPage));
+      }
+
+      const objects = [];
+      const addObject = (content) => {
+        objects.push(content);
+        return objects.length;
+      };
+
+      const fontObj = addObject('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+      const pageObjIndexes = [];
+      const contentObjIndexes = [];
+
+      for (const pageLines of pages) {
+        const contentLines = [];
+        contentLines.push('BT');
+        contentLines.push(`/F1 ${fontSize} Tf`);
+        contentLines.push(`1 0 0 1 ${leftMargin} ${pageHeight - topMargin} Tm`);
+        contentLines.push(`${lineHeight} TL`);
+
+        pageLines.forEach((line, index) => {
+          const escaped = escapePdfText(line);
+          if (index === 0) {
+            contentLines.push(`(${escaped}) Tj`);
+          } else {
+            contentLines.push('T*');
+            contentLines.push(`(${escaped}) Tj`);
+          }
+        });
+
+        contentLines.push('ET');
+        const contentStream = contentLines.join('\n');
+        const contentObj = addObject(`<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream`);
+        contentObjIndexes.push(contentObj);
+      }
+
+      const kidsPlaceholder = [];
+      const pagesObj = addObject(`<< /Type /Pages /Kids [${kidsPlaceholder.join(' ')}] /Count ${pages.length} >>`);
+      for (const contentObj of contentObjIndexes) {
+        const pageObj = addObject(`<< /Type /Page /Parent ${pagesObj} 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 ${fontObj} 0 R >> >> /Contents ${contentObj} 0 R >>`);
+        pageObjIndexes.push(pageObj);
+      }
+
+      objects[pagesObj - 1] = `<< /Type /Pages /Kids [${pageObjIndexes.map((n) => `${n} 0 R`).join(' ')}] /Count ${pageObjIndexes.length} >>`;
+
+      const catalogObj = addObject(`<< /Type /Catalog /Pages ${pagesObj} 0 R >>`);
+
+      let pdf = '%PDF-1.4\n';
+      const offsets = [0];
+      for (let i = 0; i < objects.length; i++) {
+        offsets.push(pdf.length);
+        pdf += `${i + 1} 0 obj\n${objects[i]}\nendobj\n`;
+      }
+
+      const xrefStart = pdf.length;
+      pdf += `xref\n0 ${objects.length + 1}\n`;
+      pdf += '0000000000 65535 f \n';
+      for (let i = 1; i < offsets.length; i++) {
+        pdf += `${String(offsets[i]).padStart(10, '0')} 00000 n \n`;
+      }
+      pdf += `trailer\n<< /Size ${objects.length + 1} /Root ${catalogObj} 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+
+      return new Blob([pdf], { type: 'application/pdf' });
+    }
+
+    generateBtn.addEventListener('click', async () => {
+      setGenerateLoading(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 900));
+        buildEmail();
+      } catch (error) {
+        console.error('Generate failed:', error);
+      } finally {
+        setGenerateLoading(false);
+      }
+    });
+    copyEmailBtn.addEventListener('click', () => copyTextFromNode(emailOut, copyEmailBtn));
+    copyShortBtn.addEventListener('click', () => copyTextFromNode(shortOut, copyShortBtn));
+    copyImprovedBtn.addEventListener('click', () => copyTextFromNode(improvedOut, copyImprovedBtn));
 
     downloadBtn.addEventListener('click', () => {
       const result = buildEmail();
-      const blob = new Blob(
-        [
-          `Subject: ${result.subject}\n\n`,
-          `Professional Email:\n${result.email}\n\n`,
-          `Short Version:\n${result.shortVersion}\n\n`,
-          `Improved Version:\n${result.improvedVersion}\n`,
-        ],
-        { type: 'text/plain' }
-      );
+      const blob = buildPdfBlob('AI Email Assistant Output', [
+        { heading: 'Subject', body: result.subject },
+        { heading: 'Professional Email', body: result.email },
+      ]);
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'ai_email_assistant_output.txt';
+      a.download = 'ai_email_assistant_output.pdf';
       a.click();
       URL.revokeObjectURL(url);
     });
